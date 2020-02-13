@@ -2,6 +2,7 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.annotation.GuardedBy
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodeOptions
@@ -10,20 +11,30 @@ import com.github.suckgamony.lazybitmapdecoder.DecodeState
 internal class DefaultBitmapDecoder(
     source: BitmapSource
 ) : BitmapDecoder(source) {
+    private val boundsDecodeLock = Any()
+
+    @GuardedBy("boundsDecodeLock")
     private var widthDecoded = -1
+    @GuardedBy("boundsDecodeLock")
     private var heightDecoded = -1
+
     private val boundsDecoded
+        @GuardedBy("boundsDecodeLock")
         get() = widthDecoded != -1
 
     override val width: Int
         get() {
-            decodeBounds()
-            return widthDecoded
+            synchronized(boundsDecodeLock) {
+                decodeBounds()
+                return widthDecoded
+            }
         }
     override val height: Int
         get() {
-            decodeBounds()
-            return heightDecoded
+            synchronized(boundsDecodeLock) {
+                decodeBounds()
+                return heightDecoded
+            }
         }
 
     override fun decode(options: DecodeOptions): Bitmap? {
@@ -37,6 +48,7 @@ internal class DefaultBitmapDecoder(
         return source.decodeBitmap(bitmapFactoryOptions)
     }
 
+    @GuardedBy("boundsDecodeLock")
     private fun decodeBounds() {
         if (boundsDecoded) {
             return
