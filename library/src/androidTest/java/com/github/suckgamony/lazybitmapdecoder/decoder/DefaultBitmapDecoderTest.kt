@@ -1,20 +1,31 @@
 package com.github.suckgamony.lazybitmapdecoder.decoder
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
+import com.github.suckgamony.lazybitmapdecoder.source.FileBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.test.R
 import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class DefaultBitmapDecoderTest : InstrumentedTestBase() {
+    private lateinit var appContext: Context
+
+    @Before
+    fun setUp() {
+        appContext = InstrumentationRegistry.getInstrumentation().targetContext
+    }
+
     @Test
     fun decodeResource() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         val byFactory = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
@@ -26,7 +37,6 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
 
     @Test
     fun decodeResourceWithMetadata() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
         val byFactory = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
@@ -41,8 +51,6 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
 
     @Test
     fun decodeResourceMultipleDensities() {
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-
         val ids = intArrayOf(
             R.drawable.xxxhdpi_image,
             R.drawable.xxhdpi_image,
@@ -60,5 +68,41 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
 
             assertEquals(byDecoder, byFactory)
         }
+    }
+
+    @Test
+    fun decodeFile() {
+        val byFactoryFromRes = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
+        appContext.openFileOutput("decodeFileTest.png", Context.MODE_PRIVATE).use {
+            byFactoryFromRes.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+
+        val file = File(appContext.filesDir, "decodeFileTest.png")
+        val byFactoryFromFile = BitmapFactory.decodeFile(file.path)
+
+        val source = FileBitmapSource(file)
+        val decoder = DefaultBitmapDecoder(source)
+        val byDecoder = assertNotNull(decoder.decode())
+
+        assertEquals(byDecoder, byFactoryFromFile)
+    }
+
+    @Test
+    fun decodeFileWithMetadata() {
+        val byFactoryFromRes = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
+        appContext.openFileOutput("decodeFileTest.png", Context.MODE_PRIVATE).use {
+            byFactoryFromRes.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+
+        val file = File(appContext.filesDir, "decodeFileTest.png")
+        val byFactoryFromFile = BitmapFactory.decodeFile(file.path)
+
+        val source = FileBitmapSource(file)
+        val decoder = DefaultBitmapDecoder(source)
+        assertEquals(decoder.width, byFactoryFromFile.width)
+        assertEquals(decoder.height, byFactoryFromFile.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertEquals(byDecoder, byFactoryFromFile)
     }
 }
