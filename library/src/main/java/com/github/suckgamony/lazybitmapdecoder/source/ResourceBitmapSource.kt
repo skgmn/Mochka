@@ -9,10 +9,10 @@ import android.graphics.Rect
 import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 
-class ResourceBitmapSource(
+internal class ResourceBitmapSource(
     private val res: Resources,
     @param:DrawableRes private val id: Int
-) : BitmapSource {
+) : BitmapSource() {
     override val densityScalingSupported: Boolean
         get() = true
 

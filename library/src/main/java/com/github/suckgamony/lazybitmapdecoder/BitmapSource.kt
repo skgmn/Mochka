@@ -5,10 +5,14 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 import android.graphics.RectF
 
-interface BitmapSource {
-    val densityScalingSupported: Boolean
+abstract class BitmapSource {
+    abstract val densityScalingSupported: Boolean
 
-    fun decodeBitmap(options: BitmapFactory.Options): Bitmap?
+    abstract fun decodeBitmap(options: BitmapFactory.Options): Bitmap?
 
-    fun decodeBitmapRegion(rect: Rect, options: BitmapFactory.Options): Bitmap?
+    abstract fun decodeBitmapRegion(rect: Rect, options: BitmapFactory.Options): Bitmap?
+
+    internal open fun createState(): DecodeState = DecodeState()
+
+    internal open fun createRegionalState(): DecodeState = DecodeState()
 }

@@ -1,11 +1,9 @@
 package com.github.suckgamony.lazybitmapdecoder.source
 
 import android.graphics.*
-import android.webkit.MimeTypeMap
-import androidx.core.content.MimeTypeFilter
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 
-class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource {
+class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
     override val densityScalingSupported: Boolean
         get() = false
 
