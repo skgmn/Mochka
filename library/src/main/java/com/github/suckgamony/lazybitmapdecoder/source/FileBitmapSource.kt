@@ -18,8 +18,8 @@ internal class FileBitmapSource(
         return BitmapFactory.decodeFile(file.path, options)
     }
 
-    override fun decodeBitmapRegion(state: DecoderState, rect: Rect, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
         val regionDecoder = BitmapRegionDecoder.newInstance(file.path, false)
-        return regionDecoder.decodeRegion(rect, options)
+        return regionDecoder.decodeRegion(region, options)
     }
 }

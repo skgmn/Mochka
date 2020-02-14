@@ -11,4 +11,7 @@ internal open class DecoderState {
             throw IllegalStateException()
         }
     }
+
+    open fun finishDecode() {
+    }
 }

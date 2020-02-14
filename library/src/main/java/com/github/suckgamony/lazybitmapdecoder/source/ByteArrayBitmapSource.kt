@@ -19,8 +19,8 @@ internal class ByteArrayBitmapSource(
         return BitmapFactory.decodeByteArray(data, offset, length, options)
     }
 
-    override fun decodeBitmapRegion(state: DecoderState, rect: Rect, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
         val regionDecoder = BitmapRegionDecoder.newInstance(data, offset, length, false)
-        return regionDecoder.decodeRegion(rect, options)
+        return regionDecoder.decodeRegion(region, options)
     }
 }

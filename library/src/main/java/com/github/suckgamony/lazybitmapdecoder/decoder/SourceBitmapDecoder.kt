@@ -32,13 +32,17 @@ internal class SourceBitmapDecoder(
 
     override fun decode(parameters: DecodingParameters): Bitmap? {
         state.startDecode()
-        val options = parameters.createOptions()
-        val bitmap = source.decodeBitmap(state, options)
-        synchronized(boundsDecodeLock) {
-            if (!boundsDecoded) {
-                copyMetadata(options)
+        try {
+            val options = parameters.createOptions()
+            val bitmap = source.decodeBitmap(state, options)
+            synchronized(boundsDecodeLock) {
+                if (!boundsDecoded) {
+                    copyMetadata(options)
+                }
             }
+            return bitmap
+        } finally {
+            state.finishDecode()
         }
-        return bitmap
     }
 }

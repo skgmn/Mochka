@@ -34,10 +34,10 @@ class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
         }
     }
 
-    override fun decodeBitmapRegion(state: DecoderState, rect: Rect, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
         val sampleSize = options.inSampleSize
-        val regionWidth = rect.width() / sampleSize
-        val regionHeight = rect.height() / sampleSize
+        val regionWidth = region.width() / sampleSize
+        val regionHeight = region.height() / sampleSize
 
         options.outWidth = regionWidth
         options.outHeight = regionHeight
@@ -49,7 +49,7 @@ class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
                 val dst = RectF(0f, 0f, regionWidth.toFloat(), regionHeight.toFloat())
                 val paint = Paint(Paint.FILTER_BITMAP_FLAG)
                 val canvas = Canvas(newBitmap)
-                canvas.drawBitmap(bitmap, rect, dst, paint)
+                canvas.drawBitmap(bitmap, region, dst, paint)
             }
             if (options.inMutable) {
                 partialBitmap

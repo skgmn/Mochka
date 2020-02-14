@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
 import com.github.suckgamony.lazybitmapdecoder.source.ByteArrayBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.source.FileBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.InputStreamBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.test.R
 import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import org.junit.Assert.assertEquals
@@ -16,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.InputStream
 
 @RunWith(AndroidJUnit4::class)
 class SourceBitmapDecoderTest : InstrumentedTestBase() {
@@ -142,5 +144,30 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
 
         val byDecoder = assertNotNull(decoder.decode())
         assertEquals(byDecoder, byFactoryFromFile)
+    }
+
+    @Test
+    fun decodeStream() {
+        val byFactory = BitmapFactory.decodeStream(appContext.resources.openRawResource(R.drawable.nodpi_image))
+
+        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val decoder = SourceBitmapDecoder(source)
+        val byDecoder = assertNotNull(decoder.decode())
+
+        assertEquals(byDecoder, byFactory)
+    }
+
+    @Test
+    fun decodeStreamWithMetadata() {
+        val byFactory = BitmapFactory.decodeStream(appContext.resources.openRawResource(R.drawable.nodpi_image))
+
+        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val decoder = SourceBitmapDecoder(source)
+
+        assertEquals(decoder.width, byFactory.width)
+        assertEquals(decoder.height, byFactory.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertEquals(byDecoder, byFactory)
     }
 }
