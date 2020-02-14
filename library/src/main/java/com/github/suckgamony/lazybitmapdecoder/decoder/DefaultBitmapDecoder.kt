@@ -6,11 +6,12 @@ import androidx.annotation.GuardedBy
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodeOptions
-import com.github.suckgamony.lazybitmapdecoder.DecodeState
 
 internal class DefaultBitmapDecoder(
     source: BitmapSource
 ) : BitmapDecoder(source) {
+    private val state = source.createState()
+
     private val boundsDecodeLock = Any()
 
     @GuardedBy("boundsDecodeLock")
@@ -38,12 +39,7 @@ internal class DefaultBitmapDecoder(
         }
 
     override fun decode(options: DecodeOptions): Bitmap? {
-        val state = source.createState()
-        return decodeInternal(state, options)
-    }
-
-    override fun decodeInternal(state: DecodeState, options: DecodeOptions): Bitmap? {
-        state.rewind()
+        state.startDecode()
         val bitmapFactoryOptions = options.toBitmapFactoryOptions()
         return source.decodeBitmap(bitmapFactoryOptions)
     }
@@ -58,7 +54,10 @@ internal class DefaultBitmapDecoder(
         options.inJustDecodeBounds = true
 
         source.decodeBitmap(options)
+        copyMetadata(options)
+    }
 
+    private fun copyMetadata(options: BitmapFactory.Options) {
         widthDecoded = options.outWidth
         heightDecoded = options.outHeight
     }
