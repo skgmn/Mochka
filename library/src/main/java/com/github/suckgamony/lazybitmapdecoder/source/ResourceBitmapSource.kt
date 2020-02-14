@@ -23,7 +23,6 @@ internal class ResourceBitmapSource(
         return BitmapFactory.decodeResource(res, id, options)
     }
 
-    @SuppressLint("ResourceType")
     override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
         state as InputStreamDecoderState
         val regionDecoder = BitmapRegionDecoder.newInstance(state.inputStream, false)
