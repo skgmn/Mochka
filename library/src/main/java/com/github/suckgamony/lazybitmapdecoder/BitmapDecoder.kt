@@ -8,5 +8,5 @@ abstract class BitmapDecoder(
     abstract val width: Int
     abstract val height: Int
 
-    abstract fun decode(options: DecodeOptions = DecodeOptions()): Bitmap?
+    abstract fun decode(decodingOptions: DecodingOptions = DecodingOptions()): Bitmap?
 }

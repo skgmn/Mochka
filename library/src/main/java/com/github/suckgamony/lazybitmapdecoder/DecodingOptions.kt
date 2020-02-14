@@ -2,7 +2,7 @@ package com.github.suckgamony.lazybitmapdecoder
 
 import android.graphics.BitmapFactory
 
-class DecodeOptions(
+class DecodingOptions(
     private val mutable: Boolean = false
 ) {
     fun toBitmapFactoryOptions(): BitmapFactory.Options {
