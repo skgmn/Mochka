@@ -1,9 +1,7 @@
 package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Rect
-import androidx.annotation.GuardedBy
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodingOptions
@@ -11,22 +9,22 @@ import com.github.suckgamony.lazybitmapdecoder.DecodingParameters
 
 internal class RegionalSourceBitmapDecoder(
     private val source: BitmapSource,
-    rect: Rect
+    region: Rect
 ) : BitmapDecoder() {
-    private val state = source.createRegionalState()
-    private val coercedRect by lazy {
+    override val state = source.createRegionalState()
+    private val coercedRegion by lazy {
         Rect(
-            rect.left.coerceIn(0, sourceWidth),
-            rect.top.coerceIn(0, sourceHeight),
-            rect.right.coerceIn(0, sourceWidth),
-            rect.bottom.coerceIn(0, sourceHeight)
+            region.left.coerceIn(0, sourceWidth),
+            region.top.coerceIn(0, sourceHeight),
+            region.right.coerceIn(0, sourceWidth),
+            region.bottom.coerceIn(0, sourceHeight)
         )
     }
 
     override val width: Int
-        get() = coercedRect.width()
+        get() = coercedRegion.width()
     override val height: Int
-        get() = coercedRect.height()
+        get() = coercedRegion.height()
 
     override val sourceWidth: Int
         get() {
@@ -43,9 +41,16 @@ internal class RegionalSourceBitmapDecoder(
             }
         }
 
-    override fun decode(decodingParameters: DecodingParameters): Bitmap? {
+    override fun fillInParameters(decodingOptions: DecodingOptions): DecodingParameters {
+        return DecodingParameters(
+            decodingOptions = decodingOptions,
+            region = coercedRegion
+        )
+    }
+
+    override fun decode(parameters: DecodingParameters): Bitmap? {
         state.startDecode()
-        val options = decodingParameters.decodingOptions.toBitmapFactoryOptions()
-        return source.decodeBitmapRegion(coercedRect, options)
+        val options = parameters.createOptions()
+        return source.decodeBitmapRegion(state, parameters.region ?: coercedRegion, options)
     }
 }

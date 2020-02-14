@@ -11,6 +11,8 @@ abstract class BitmapDecoder {
     abstract val sourceWidth: Int
     abstract val sourceHeight: Int
 
+    internal abstract val state: DecoderState
+
     protected val boundsDecodeLock = Any()
 
     @GuardedBy("boundsDecodeLock")
@@ -23,10 +25,14 @@ abstract class BitmapDecoder {
         get() = widthDecoded != -1
 
     fun decode(decodingOptions: DecodingOptions = DecodingOptions()): Bitmap? {
-        return decode(DecodingParameters(decodingOptions))
+        return decode(fillInParameters(decodingOptions))
     }
 
-    internal abstract fun decode(decodingParameters: DecodingParameters): Bitmap?
+    internal abstract fun decode(parameters: DecodingParameters): Bitmap?
+
+    internal open fun fillInParameters(decodingOptions: DecodingOptions): DecodingParameters {
+        return DecodingParameters(decodingOptions)
+    }
 
     @GuardedBy("boundsDecodeLock")
     protected fun decodeBounds(source: BitmapSource) {
@@ -37,7 +43,7 @@ abstract class BitmapDecoder {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
 
-        source.decodeBitmap(options)
+        source.decodeBitmap(state, options)
         copyMetadata(options)
     }
 

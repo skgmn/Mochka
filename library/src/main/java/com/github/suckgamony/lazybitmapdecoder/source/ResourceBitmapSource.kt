@@ -8,6 +8,7 @@ import android.graphics.BitmapRegionDecoder
 import android.graphics.Rect
 import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
+import com.github.suckgamony.lazybitmapdecoder.DecoderState
 
 internal class ResourceBitmapSource(
     private val res: Resources,
@@ -16,12 +17,12 @@ internal class ResourceBitmapSource(
     override val densityScalingSupported: Boolean
         get() = true
 
-    override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmap(state: DecoderState, options: BitmapFactory.Options): Bitmap? {
         return BitmapFactory.decodeResource(res, id, options)
     }
 
     @SuppressLint("ResourceType")
-    override fun decodeBitmapRegion(rect: Rect, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmapRegion(state: DecoderState, rect: Rect, options: BitmapFactory.Options): Bitmap? {
         val inputStream = res.openRawResource(id)
         val regionDecoder = BitmapRegionDecoder.newInstance(inputStream, false)
         return regionDecoder.decodeRegion(rect, options)
