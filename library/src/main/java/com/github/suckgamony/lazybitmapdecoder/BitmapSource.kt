@@ -11,7 +11,7 @@ abstract class BitmapSource {
 
     abstract fun decodeBitmapRegion(rect: Rect, options: BitmapFactory.Options): Bitmap?
 
-    internal open fun createState(): DecodingState = DecodingState()
+    internal open fun createState(): DecoderState = DecoderState()
 
-    internal open fun createRegionalState(): DecodingState = DecodingState()
+    internal open fun createRegionalState(): DecoderState = DecoderState()
 }

@@ -18,7 +18,7 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 @RunWith(AndroidJUnit4::class)
-class DefaultBitmapDecoderTest : InstrumentedTestBase() {
+class SourceBitmapDecoderTest : InstrumentedTestBase() {
     private lateinit var appContext: Context
 
     @Before
@@ -31,7 +31,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactory = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactory)
@@ -42,7 +42,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactory = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
 
         assertEquals(decoder.width, byFactory.width)
         assertEquals(decoder.height, byFactory.height)
@@ -65,7 +65,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
             val byFactory = BitmapFactory.decodeResource(appContext.resources, it)
 
             val source = ResourceBitmapSource(appContext.resources, it)
-            val decoder = DefaultBitmapDecoder(source)
+            val decoder = SourceBitmapDecoder(source)
             val byDecoder = assertNotNull(decoder.decode())
 
             assertEquals(byDecoder, byFactory)
@@ -83,7 +83,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactoryFromByteArray = BitmapFactory.decodeByteArray(data, 0, data.size)
 
         val source = ByteArrayBitmapSource(data, 0, data.size)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactoryFromByteArray)
@@ -100,7 +100,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactoryFromByteArray = BitmapFactory.decodeByteArray(data, 0, data.size)
 
         val source = ByteArrayBitmapSource(data, 0, data.size)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
         assertEquals(decoder.width, byFactoryFromByteArray.width)
         assertEquals(decoder.height, byFactoryFromByteArray.height)
 
@@ -119,7 +119,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactoryFromFile = BitmapFactory.decodeFile(file.path)
 
         val source = FileBitmapSource(file)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactoryFromFile)
@@ -136,7 +136,7 @@ class DefaultBitmapDecoderTest : InstrumentedTestBase() {
         val byFactoryFromFile = BitmapFactory.decodeFile(file.path)
 
         val source = FileBitmapSource(file)
-        val decoder = DefaultBitmapDecoder(source)
+        val decoder = SourceBitmapDecoder(source)
         assertEquals(decoder.width, byFactoryFromFile.width)
         assertEquals(decoder.height, byFactoryFromFile.height)
 
