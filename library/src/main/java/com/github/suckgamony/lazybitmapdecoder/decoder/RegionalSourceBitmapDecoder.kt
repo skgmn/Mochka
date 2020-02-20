@@ -50,7 +50,11 @@ internal class RegionalSourceBitmapDecoder(
 
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         state.startDecode()
-        val params = parametersBuilder.buildParameters()
-        return source.decodeBitmapRegion(state, parametersBuilder.region ?: coercedRegion, params.options)
+        try {
+            val params = parametersBuilder.buildParameters()
+            return source.decodeBitmapRegion(state, parametersBuilder.region ?: coercedRegion, params.options)
+        } finally {
+            state.finishDecode()
+        }
     }
 }
