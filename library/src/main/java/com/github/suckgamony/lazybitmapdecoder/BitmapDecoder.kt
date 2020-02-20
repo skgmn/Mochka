@@ -28,10 +28,10 @@ abstract class BitmapDecoder {
         return decode(fillInParameters(decodingOptions))
     }
 
-    internal abstract fun decode(parameters: DecodingParameters): Bitmap?
+    internal abstract fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap?
 
-    internal open fun fillInParameters(decodingOptions: DecodingOptions): DecodingParameters {
-        return DecodingParameters(decodingOptions)
+    internal open fun fillInParameters(decodingOptions: DecodingOptions): DecodingParametersBuilder {
+        return DecodingParametersBuilder(decodingOptions)
     }
 
     @GuardedBy("boundsDecodeLock")

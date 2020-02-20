@@ -3,7 +3,7 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 import android.graphics.Bitmap
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
-import com.github.suckgamony.lazybitmapdecoder.DecodingParameters
+import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
 internal class SourceBitmapDecoder(
     private val source: BitmapSource
@@ -30,14 +30,14 @@ internal class SourceBitmapDecoder(
     override val sourceHeight: Int
         get() = height
 
-    override fun decode(parameters: DecodingParameters): Bitmap? {
+    override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         state.startDecode()
         try {
-            val options = parameters.createOptions()
-            val bitmap = source.decodeBitmap(state, options)
+            val params = parametersBuilder.buildParameters()
+            val bitmap = source.decodeBitmap(state, params.options)
             synchronized(boundsDecodeLock) {
                 if (!boundsDecoded) {
-                    copyMetadata(options)
+                    copyMetadata(params.options)
                 }
             }
             return bitmap

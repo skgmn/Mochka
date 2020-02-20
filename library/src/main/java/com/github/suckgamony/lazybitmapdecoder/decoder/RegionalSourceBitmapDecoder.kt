@@ -5,7 +5,7 @@ import android.graphics.Rect
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodingOptions
-import com.github.suckgamony.lazybitmapdecoder.DecodingParameters
+import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
 internal class RegionalSourceBitmapDecoder(
     private val source: BitmapSource,
@@ -41,16 +41,16 @@ internal class RegionalSourceBitmapDecoder(
             }
         }
 
-    override fun fillInParameters(decodingOptions: DecodingOptions): DecodingParameters {
-        return DecodingParameters(
+    override fun fillInParameters(decodingOptions: DecodingOptions): DecodingParametersBuilder {
+        return DecodingParametersBuilder(
             decodingOptions = decodingOptions,
             region = coercedRegion
         )
     }
 
-    override fun decode(parameters: DecodingParameters): Bitmap? {
+    override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         state.startDecode()
-        val options = parameters.createOptions()
-        return source.decodeBitmapRegion(state, parameters.region ?: coercedRegion, options)
+        val params = parametersBuilder.buildParameters()
+        return source.decodeBitmapRegion(state, parametersBuilder.region ?: coercedRegion, params.options)
     }
 }
