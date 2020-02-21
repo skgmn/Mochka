@@ -2,6 +2,7 @@ package com.github.suckgamony.lazybitmapdecoder
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import androidx.annotation.GuardedBy
 
 abstract class BitmapDecoder {
@@ -19,6 +20,8 @@ abstract class BitmapDecoder {
     protected var widthDecoded = -1
     @GuardedBy("boundsDecodeLock")
     protected var heightDecoded = -1
+    @GuardedBy("boundsDecodeLock")
+    protected var densityScale = 1f
 
     protected val boundsDecoded
         @GuardedBy("boundsDecodeLock")
@@ -51,5 +54,18 @@ abstract class BitmapDecoder {
     protected fun copyMetadata(options: BitmapFactory.Options) {
         widthDecoded = options.outWidth
         heightDecoded = options.outHeight
+        if (options.inScaled && options.inDensity != 0 && options.inTargetDensity != 0) {
+            densityScale = options.inTargetDensity.toFloat() / options.inDensity
+        }
+    }
+
+    internal fun postProcess(bitmap: Bitmap?, params: DecodingParameters): Bitmap? {
+        return if (bitmap == null || params.postScaleX == 1f && params.postScaleY == 1f) {
+            bitmap
+        } else {
+            val m = Matrix()
+            m.setScale(params.postScaleX, params.postScaleY)
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        }
     }
 }

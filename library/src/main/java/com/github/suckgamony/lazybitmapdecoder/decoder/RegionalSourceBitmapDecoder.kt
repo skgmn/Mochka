@@ -6,25 +6,20 @@ import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodingOptions
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
+import kotlin.math.ceil
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 internal class RegionalSourceBitmapDecoder(
     private val source: BitmapSource,
-    region: Rect
+    private val region: Rect
 ) : BitmapDecoder() {
     override val state = source.createRegionalState()
-    private val coercedRegion by lazy {
-        Rect(
-            region.left.coerceIn(0, sourceWidth),
-            region.top.coerceIn(0, sourceHeight),
-            region.right.coerceIn(0, sourceWidth),
-            region.bottom.coerceIn(0, sourceHeight)
-        )
-    }
 
     override val width: Int
-        get() = coercedRegion.width()
+        get() = region.width()
     override val height: Int
-        get() = coercedRegion.height()
+        get() = region.height()
 
     override val sourceWidth: Int
         get() {
@@ -42,9 +37,31 @@ internal class RegionalSourceBitmapDecoder(
         }
 
     override fun fillInParameters(decodingOptions: DecodingOptions): DecodingParametersBuilder {
+        val densityScale = if (source.densityScalingSupported) {
+            synchronized(boundsDecodeLock) {
+                decodeBounds(source)
+                densityScale
+            }
+        } else {
+            1f
+        }
+
+        val scaledRegion = if (densityScale == 1f) {
+            region
+        } else {
+            Rect(region).apply {
+                left = (left / densityScale).roundToInt()
+                top = (top / densityScale).roundToInt()
+                right = (right / densityScale).roundToInt()
+                bottom = (bottom / densityScale).roundToInt()
+            }
+        }
+
         return DecodingParametersBuilder(
             decodingOptions = decodingOptions,
-            region = coercedRegion
+            scaleX = region.width().toFloat() / scaledRegion.width(),
+            scaleY = region.height().toFloat() / scaledRegion.height(),
+            region = scaledRegion
         )
     }
 
@@ -52,7 +69,9 @@ internal class RegionalSourceBitmapDecoder(
         state.startDecode()
         try {
             val params = parametersBuilder.buildParameters()
-            return source.decodeBitmapRegion(state, parametersBuilder.region ?: coercedRegion, params.options)
+            checkNotNull(params.region)
+            val bitmap = source.decodeBitmapRegion(state, params.region, params.options)
+            return postProcess(bitmap, params)
         } finally {
             state.finishDecode()
         }

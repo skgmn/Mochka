@@ -40,7 +40,7 @@ internal class SourceBitmapDecoder(
                     copyMetadata(params.options)
                 }
             }
-            return bitmap
+            return postProcess(bitmap, params)
         } finally {
             state.finishDecode()
         }
