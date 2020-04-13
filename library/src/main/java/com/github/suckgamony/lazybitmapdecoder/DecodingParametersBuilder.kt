@@ -4,14 +4,12 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 
 internal data class DecodingParametersBuilder(
-    val decodingOptions: DecodingOptions,
     val scaleX: Float = 1f,
     val scaleY: Float = 1f,
     val region: Rect? = null
 ) {
     fun buildParameters(): DecodingParameters {
         val options = BitmapFactory.Options()
-        decodingOptions.fillInOptions(options)
 
         var sampleSize = 1
         var sx = scaleX
@@ -25,7 +23,6 @@ internal data class DecodingParametersBuilder(
 
         return DecodingParameters(
             options = options,
-            decodingOptions = decodingOptions,
             postScaleX = sx,
             postScaleY = sy,
             region = region

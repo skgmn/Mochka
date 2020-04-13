@@ -2,12 +2,8 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
 import android.graphics.Rect
-import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
-import com.github.suckgamony.lazybitmapdecoder.DecodingOptions
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
-import kotlin.math.ceil
-import kotlin.math.floor
 import kotlin.math.roundToInt
 
 internal class RegionalSourceBitmapDecoder(
@@ -36,7 +32,7 @@ internal class RegionalSourceBitmapDecoder(
             }
         }
 
-    override fun fillInParameters(decodingOptions: DecodingOptions): DecodingParametersBuilder {
+    override fun fillInParameters(): DecodingParametersBuilder {
         val densityScale = if (source.densityScalingSupported) {
             synchronized(boundsDecodeLock) {
                 decodeBounds(source)
@@ -58,7 +54,6 @@ internal class RegionalSourceBitmapDecoder(
         }
 
         return DecodingParametersBuilder(
-            decodingOptions = decodingOptions,
             scaleX = region.width().toFloat() / scaledRegion.width(),
             scaleY = region.height().toFloat() / scaledRegion.height(),
             region = scaledRegion

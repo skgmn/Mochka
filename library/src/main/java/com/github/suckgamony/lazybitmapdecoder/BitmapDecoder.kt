@@ -1,9 +1,7 @@
 package com.github.suckgamony.lazybitmapdecoder
 
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import androidx.annotation.GuardedBy
 
 abstract class BitmapDecoder {
     abstract val width: Int
@@ -12,14 +10,14 @@ abstract class BitmapDecoder {
     abstract val sourceWidth: Int
     abstract val sourceHeight: Int
 
-    fun decode(decodingOptions: DecodingOptions = DecodingOptions()): Bitmap? {
-        return decode(fillInParameters(decodingOptions))
+    fun decode(): Bitmap? {
+        return decode(fillInParameters())
     }
 
     internal abstract fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap?
 
-    internal open fun fillInParameters(decodingOptions: DecodingOptions): DecodingParametersBuilder {
-        return DecodingParametersBuilder(decodingOptions)
+    internal open fun fillInParameters(): DecodingParametersBuilder {
+        return DecodingParametersBuilder()
     }
 
     internal fun postProcess(bitmap: Bitmap?, params: DecodingParameters): Bitmap? {
