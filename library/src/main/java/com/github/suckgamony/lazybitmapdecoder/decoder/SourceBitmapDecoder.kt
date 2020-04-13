@@ -7,7 +7,7 @@ import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
 internal class SourceBitmapDecoder(
     private val source: BitmapSource
-) : BitmapDecoder() {
+) : BaseSourceBitmapDecoder() {
     override val state = source.createState()
 
     override val width: Int

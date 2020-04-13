@@ -13,7 +13,7 @@ import kotlin.math.roundToInt
 internal class RegionalSourceBitmapDecoder(
     private val source: BitmapSource,
     private val region: Rect
-) : BitmapDecoder() {
+) : BaseSourceBitmapDecoder() {
     override val state = source.createRegionalState()
 
     override val width: Int
