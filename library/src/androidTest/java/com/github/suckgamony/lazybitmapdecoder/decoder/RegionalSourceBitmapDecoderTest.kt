@@ -10,6 +10,8 @@ import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
 import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.test.R
 import org.junit.Assert
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -74,7 +76,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
             val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
             val byDecoder = assertNotNull(decoder.decode())
 
-            assertEquals(byDecoder, byFactory)
+            assertEquals(byDecoder, byFactory, 0x0c)
         }
     }
 }
