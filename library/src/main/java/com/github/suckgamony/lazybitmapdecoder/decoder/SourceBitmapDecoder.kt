@@ -25,11 +25,6 @@ internal class SourceBitmapDecoder(
             }
         }
 
-    override val sourceWidth: Int
-        get() = width
-    override val sourceHeight: Int
-        get() = height
-
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         state.startDecode()
         try {

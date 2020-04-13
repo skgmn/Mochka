@@ -7,9 +7,6 @@ abstract class BitmapDecoder {
     abstract val width: Int
     abstract val height: Int
 
-    abstract val sourceWidth: Int
-    abstract val sourceHeight: Int
-
     fun decode(): Bitmap? {
         return decode(fillInParameters())
     }
