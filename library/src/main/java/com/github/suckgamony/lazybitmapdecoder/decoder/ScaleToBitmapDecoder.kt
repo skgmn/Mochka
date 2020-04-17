@@ -1,6 +1,5 @@
 package com.github.suckgamony.lazybitmapdecoder.decoder
 
-import android.graphics.Bitmap
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
@@ -17,8 +16,8 @@ internal class ScaleToBitmapDecoder(
         }
     }
 
-    override fun fillInParameters(): DecodingParametersBuilder {
-        return other.fillInParameters().copy(
+    override fun makeParameters(): DecodingParametersBuilder {
+        return other.makeParameters().copy(
             scaleX = width.toFloat() / other.width,
             scaleY = height.toFloat() / other.height
         )

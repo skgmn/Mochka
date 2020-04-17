@@ -17,7 +17,7 @@ internal class RegionalSourceBitmapDecoder(
     override val height: Int
         get() = region.height()
 
-    override fun fillInParameters(): DecodingParametersBuilder {
+    override fun makeParameters(): DecodingParametersBuilder {
         val densityScale = if (source.densityScalingSupported) {
             synchronized(boundsDecodeLock) {
                 decodeBounds(source)

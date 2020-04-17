@@ -13,12 +13,12 @@ abstract class BitmapDecoder {
     }
 
     fun decode(): Bitmap? {
-        return decode(fillInParameters())
+        return decode(makeParameters())
     }
 
     internal abstract fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap?
 
-    internal open fun fillInParameters(): DecodingParametersBuilder {
+    internal open fun makeParameters(): DecodingParametersBuilder {
         return DecodingParametersBuilder()
     }
 
