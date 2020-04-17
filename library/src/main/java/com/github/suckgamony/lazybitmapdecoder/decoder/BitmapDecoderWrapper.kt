@@ -5,7 +5,7 @@ import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
 internal abstract class BitmapDecoderWrapper(
-    protected val other: BitmapDecoder
+    internal val other: BitmapDecoder
 ): BitmapDecoder() {
     override val width: Int
         get() = other.width
@@ -14,6 +14,10 @@ internal abstract class BitmapDecoderWrapper(
 
     override fun scaleTo(width: Int, height: Int): BitmapDecoder {
         return other.scaleTo(width, height)
+    }
+
+    override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
+        return other.scaleBy(scaleWidth, scaleHeight)
     }
 
     override fun makeParameters(): DecodingParametersBuilder {

@@ -2,6 +2,7 @@ package com.github.suckgamony.lazybitmapdecoder
 
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleByBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleToBitmapDecoder
 
 abstract class BitmapDecoder {
@@ -10,6 +11,10 @@ abstract class BitmapDecoder {
 
     open fun scaleTo(width: Int, height: Int): BitmapDecoder {
         return ScaleToBitmapDecoder(this, width, height)
+    }
+
+    open fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
+        return ScaleByBitmapDecoder(this, scaleWidth, scaleHeight)
     }
 
     fun decode(): Bitmap? {

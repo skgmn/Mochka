@@ -16,6 +16,14 @@ internal class ScaleToBitmapDecoder(
         }
     }
 
+    override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
+        return if (scaleWidth == 1f && scaleHeight == 1f) {
+            this
+        } else {
+            ScaleByBitmapDecoder(this, scaleWidth, scaleHeight)
+        }
+    }
+
     override fun makeParameters(): DecodingParametersBuilder {
         return other.makeParameters().copy(
             scaleX = width.toFloat() / other.width,
