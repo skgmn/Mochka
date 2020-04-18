@@ -3,10 +3,10 @@ package com.github.suckgamony.lazybitmapdecoder
 import android.graphics.BitmapFactory
 import android.graphics.Rect
 
-internal data class DecodingParametersBuilder(
-    val scaleX: Float = 1f,
-    val scaleY: Float = 1f,
-    val region: Rect? = null
+internal class DecodingParametersBuilder(
+    var scaleX: Float = 1f,
+    var scaleY: Float = 1f,
+    var region: Rect? = null
 ) {
     fun buildParameters(): DecodingParameters {
         val options = BitmapFactory.Options()

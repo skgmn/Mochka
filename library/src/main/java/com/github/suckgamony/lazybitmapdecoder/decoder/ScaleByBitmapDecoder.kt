@@ -31,11 +31,9 @@ internal class ScaleByBitmapDecoder(
     }
 
     override fun makeParameters(): DecodingParametersBuilder {
-        return other.makeParameters().run {
-            copy(
-                scaleX = scaleX * scaleWidth,
-                scaleY = scaleY * scaleHeight
-            )
+        return other.makeParameters().apply {
+            scaleX *= scaleWidth
+            scaleY *= scaleHeight
         }
     }
 }
