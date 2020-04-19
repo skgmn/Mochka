@@ -150,7 +150,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
     fun decodeStream() {
         val byFactory = BitmapFactory.decodeStream(appContext.resources.openRawResource(R.drawable.nodpi_image))
 
-        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val source = InputStreamBitmapSource(appContext.resources.openRawResource(R.drawable.nodpi_image))
         val decoder = SourceBitmapDecoder(source)
         val byDecoder = assertNotNull(decoder.decode())
 
@@ -161,7 +161,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
     fun decodeStreamWithMetadata() {
         val byFactory = BitmapFactory.decodeStream(appContext.resources.openRawResource(R.drawable.nodpi_image))
 
-        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val source = InputStreamBitmapSource(appContext.resources.openRawResource(R.drawable.nodpi_image))
         val decoder = SourceBitmapDecoder(source)
 
         assertEquals(decoder.width, byFactory.width)

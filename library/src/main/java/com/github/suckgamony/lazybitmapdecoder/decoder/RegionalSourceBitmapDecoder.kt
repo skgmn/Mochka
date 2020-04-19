@@ -14,8 +14,6 @@ internal class RegionalSourceBitmapDecoder(
     private val right: Int,
     private val bottom: Int
 ) : BaseSourceBitmapDecoder() {
-    override val state = source.createRegionalState()
-
     override val width: Int
         get() = right - left
     override val height: Int
@@ -62,14 +60,14 @@ internal class RegionalSourceBitmapDecoder(
     }
 
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
-        state.startDecode()
+        source.onDecodeStarted()
         try {
             val params = parametersBuilder.buildParameters()
             checkNotNull(params.region)
-            val bitmap = source.decodeBitmapRegion(state, params.region, params.options)
+            val bitmap = source.decodeBitmapRegion(params.region, params.options)
             return postProcess(bitmap, params)
         } finally {
-            state.finishDecode()
+            source.onDecodeFinished()
         }
     }
 }

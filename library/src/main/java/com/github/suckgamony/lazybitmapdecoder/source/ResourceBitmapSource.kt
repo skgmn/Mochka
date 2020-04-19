@@ -8,8 +8,6 @@ import android.graphics.BitmapRegionDecoder
 import android.graphics.Rect
 import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
-import com.github.suckgamony.lazybitmapdecoder.DecoderState
-import com.github.suckgamony.lazybitmapdecoder.util.InputStreamDecoderState
 import com.github.suckgamony.lazybitmapdecoder.util.RewindableInputStream
 
 internal class ResourceBitmapSource(
@@ -19,19 +17,15 @@ internal class ResourceBitmapSource(
     override val densityScalingSupported: Boolean
         get() = true
 
-    override fun decodeBitmap(state: DecoderState, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {
         return BitmapFactory.decodeResource(res, id, options)
     }
 
-    override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
-        state as InputStreamDecoderState
-        val regionDecoder = BitmapRegionDecoder.newInstance(state.inputStream, false)
-        return regionDecoder.decodeRegion(region, options)
-    }
-
     @SuppressLint("ResourceType")
-    override fun createRegionalState(): DecoderState {
-        val inputStream = res.openRawResource(id)
-        return InputStreamDecoderState(RewindableInputStream(inputStream))
+    override fun decodeBitmapRegion(region: Rect, options: BitmapFactory.Options): Bitmap? {
+        res.openRawResource(id).use { inputStream ->
+            val regionDecoder = BitmapRegionDecoder.newInstance(inputStream, false)
+            return regionDecoder.decodeRegion(region, options)
+        }
     }
 }

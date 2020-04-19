@@ -176,7 +176,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
             12, 34, 56, 78
         )
 
-        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val source = InputStreamBitmapSource(appContext.resources.openRawResource(R.drawable.nodpi_image))
         val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         val byDecoder = assertNotNull(decoder.decode())
 
@@ -190,7 +190,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
             12, 34, 56, 78
         )
 
-        val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
+        val source = InputStreamBitmapSource(appContext.resources.openRawResource(R.drawable.nodpi_image))
         val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
 
         assertEquals(decoder.width, byFactory.width)

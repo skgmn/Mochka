@@ -4,11 +4,8 @@ import android.graphics.BitmapFactory
 import androidx.annotation.GuardedBy
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
-import com.github.suckgamony.lazybitmapdecoder.DecoderState
 
 abstract class BaseSourceBitmapDecoder : BitmapDecoder() {
-    internal abstract val state: DecoderState
-
     protected val boundsDecodeLock = Any()
 
     @GuardedBy("boundsDecodeLock")
@@ -31,7 +28,7 @@ abstract class BaseSourceBitmapDecoder : BitmapDecoder() {
         val options = BitmapFactory.Options()
         options.inJustDecodeBounds = true
 
-        source.decodeBitmap(state, options)
+        source.decodeBitmap(options)
         copyMetadata(options)
     }
 

@@ -2,13 +2,12 @@ package com.github.suckgamony.lazybitmapdecoder.source
 
 import android.graphics.*
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
-import com.github.suckgamony.lazybitmapdecoder.DecoderState
 
 class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
     override val densityScalingSupported: Boolean
         get() = false
 
-    override fun decodeBitmap(state: DecoderState, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {
         val sampleSize = options.inSampleSize
         val bitmapWidth = Math.ceil(bitmap.width / sampleSize.toDouble()).toInt()
         val bitmapHeight = Math.ceil(bitmap.height / sampleSize.toDouble()).toInt()
@@ -34,7 +33,7 @@ class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
         }
     }
 
-    override fun decodeBitmapRegion(state: DecoderState, region: Rect, options: BitmapFactory.Options): Bitmap? {
+    override fun decodeBitmapRegion(region: Rect, options: BitmapFactory.Options): Bitmap? {
         val sampleSize = options.inSampleSize
         val regionWidth = region.width() / sampleSize
         val regionHeight = region.height() / sampleSize

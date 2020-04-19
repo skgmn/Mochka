@@ -8,8 +8,6 @@ import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 internal class SourceBitmapDecoder(
     internal val source: BitmapSource
 ) : BaseSourceBitmapDecoder() {
-    override val state = source.createState()
-
     override val width: Int
         get() {
             synchronized(boundsDecodeLock) {
@@ -30,10 +28,10 @@ internal class SourceBitmapDecoder(
     }
 
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
-        state.startDecode()
+        source.onDecodeStarted()
         try {
             val params = parametersBuilder.buildParameters()
-            val bitmap = source.decodeBitmap(state, params.options)
+            val bitmap = source.decodeBitmap(params.options)
             synchronized(boundsDecodeLock) {
                 if (!boundsDecoded) {
                     copyMetadata(params.options)
@@ -41,7 +39,7 @@ internal class SourceBitmapDecoder(
             }
             return postProcess(bitmap, params)
         } finally {
-            state.finishDecode()
+            source.onDecodeFinished()
         }
     }
 }
