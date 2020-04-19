@@ -38,7 +38,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactory)
@@ -52,7 +52,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
 
         Assert.assertEquals(decoder.width, byFactory.width)
         Assert.assertEquals(decoder.height, byFactory.height)
@@ -78,7 +78,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
             )
 
             val source = ResourceBitmapSource(appContext.resources, it)
-            val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+            val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
             val byDecoder = assertNotNull(decoder.decode())
 
             assertEquals(byDecoder, byFactory, TOLERANCE)
@@ -99,7 +99,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = ByteArrayBitmapSource(data, 0, data.size)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactoryFromByteArray, TOLERANCE)
@@ -119,7 +119,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = ByteArrayBitmapSource(data, 0, data.size)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         assertEquals(decoder.width, byFactoryFromByteArray.width)
         assertEquals(decoder.height, byFactoryFromByteArray.height)
 
@@ -141,7 +141,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = FileBitmapSource(file)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactoryFromFile, TOLERANCE)
@@ -161,7 +161,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = FileBitmapSource(file)
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         assertEquals(decoder.width, byFactoryFromFile.width)
         assertEquals(decoder.height, byFactoryFromFile.height)
 
@@ -177,7 +177,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
         val byDecoder = assertNotNull(decoder.decode())
 
         assertEquals(byDecoder, byFactory)
@@ -191,7 +191,7 @@ class RegionalSourceBitmapDecoderTest : InstrumentedTestBase() {
         )
 
         val source = InputStreamBitmapSource { appContext.resources.openRawResource(R.drawable.nodpi_image) }
-        val decoder = RegionalSourceBitmapDecoder(source, Rect(12, 34, 12 + 56, 34 + 78))
+        val decoder = RegionalSourceBitmapDecoder(source, 12, 34, 12 + 56, 34 + 78)
 
         assertEquals(decoder.width, byFactory.width)
         assertEquals(decoder.height, byFactory.height)

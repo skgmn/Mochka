@@ -2,20 +2,40 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
 import android.graphics.Rect
+import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 import kotlin.math.roundToInt
 
 internal class RegionalSourceBitmapDecoder(
     private val source: BitmapSource,
-    private val region: Rect
+    private val left: Int,
+    private val top: Int,
+    private val right: Int,
+    private val bottom: Int
 ) : BaseSourceBitmapDecoder() {
     override val state = source.createRegionalState()
 
     override val width: Int
-        get() = region.width()
+        get() = right - left
     override val height: Int
-        get() = region.height()
+        get() = bottom - top
+
+    override fun region(left: Int, top: Int, right: Int, bottom: Int): BitmapDecoder {
+        return if (left == 0 && top == 0 && right == width && bottom == height) {
+            this
+        } else {
+            val newLeft = this.left + left
+            val newTop = this.top + top
+            RegionalSourceBitmapDecoder(
+                source,
+                newLeft,
+                newTop,
+                newLeft + (right - left),
+                newTop + (bottom - top)
+            )
+        }
+    }
 
     override fun makeParameters(): DecodingParametersBuilder {
         val densityScale = if (source.densityScalingSupported) {
@@ -27,20 +47,16 @@ internal class RegionalSourceBitmapDecoder(
             1f
         }
 
-        val scaledRegion = if (densityScale == 1f) {
-            region
-        } else {
-            Rect(region).apply {
-                left = (left / densityScale).roundToInt()
-                top = (top / densityScale).roundToInt()
-                right = (right / densityScale).roundToInt()
-                bottom = (bottom / densityScale).roundToInt()
-            }
-        }
+        val scaledRegion = Rect(
+            (left / densityScale).roundToInt(),
+            (top / densityScale).roundToInt(),
+            (right / densityScale).roundToInt(),
+            (bottom / densityScale).roundToInt()
+        )
 
         return DecodingParametersBuilder(
-            scaleX = region.width().toFloat() / scaledRegion.width(),
-            scaleY = region.height().toFloat() / scaledRegion.height(),
+            scaleX = width.toFloat() / scaledRegion.width(),
+            scaleY = height.toFloat() / scaledRegion.height(),
             region = scaledRegion
         )
     }

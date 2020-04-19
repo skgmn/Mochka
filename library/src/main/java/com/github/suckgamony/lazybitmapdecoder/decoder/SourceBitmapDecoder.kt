@@ -25,6 +25,10 @@ internal class SourceBitmapDecoder(
             }
         }
 
+    override fun region(left: Int, top: Int, right: Int, bottom: Int): BitmapDecoder {
+        return RegionalSourceBitmapDecoder(source, left, top, right, bottom)
+    }
+
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         state.startDecode()
         try {
