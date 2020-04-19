@@ -28,4 +28,8 @@ internal class DecodingParametersBuilder(
             region = region
         )
     }
+
+    companion object {
+        internal const val FLAG_REGIONAL = 1
+    }
 }

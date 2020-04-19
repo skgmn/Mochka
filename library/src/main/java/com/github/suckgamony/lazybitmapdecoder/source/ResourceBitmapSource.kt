@@ -14,7 +14,7 @@ internal class ResourceBitmapSource(
     private val res: Resources,
     @param:DrawableRes private val id: Int
 ) : BitmapSource() {
-    override val densityScalingSupported: Boolean
+    override val manualDensityScalingForRegional: Boolean
         get() = true
 
     override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {

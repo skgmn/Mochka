@@ -4,7 +4,7 @@ import android.graphics.*
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 
 class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
-    override val densityScalingSupported: Boolean
+    override val manualDensityScalingForRegional: Boolean
         get() = false
 
     override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {

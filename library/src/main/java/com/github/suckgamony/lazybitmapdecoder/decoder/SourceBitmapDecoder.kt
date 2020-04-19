@@ -1,7 +1,6 @@
 package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
-import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 
@@ -23,18 +22,33 @@ internal class SourceBitmapDecoder(
             }
         }
 
-    override fun region(left: Int, top: Int, right: Int, bottom: Int): BitmapDecoder {
-        return RegionalSourceBitmapDecoder(source, left, top, right, bottom)
+    override fun makeParameters(flags: Int): DecodingParametersBuilder {
+        return if ((flags and DecodingParametersBuilder.FLAG_REGIONAL) != 0) {
+            val parametersBuilder = super.makeParameters(flags)
+            if (source.manualDensityScalingForRegional) {
+                decodeBounds(source)
+                parametersBuilder.scaleX *= densityScale
+                parametersBuilder.scaleY *= densityScale
+            }
+            parametersBuilder
+        } else {
+            super.makeParameters(flags)
+        }
     }
 
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {
         source.onDecodeStarted()
         try {
             val params = parametersBuilder.buildParameters()
-            val bitmap = source.decodeBitmap(params.options)
-            synchronized(boundsDecodeLock) {
-                if (!boundsDecoded) {
-                    copyMetadata(params.options)
+            val bitmap = if (params.region != null) {
+                source.decodeBitmapRegion(params.region, params.options)
+            } else {
+                source.decodeBitmap(params.options).also {
+                    synchronized(boundsDecodeLock) {
+                        if (!boundsDecoded) {
+                            copyMetadata(params.options)
+                        }
+                    }
                 }
             }
             return postProcess(bitmap, params)

@@ -11,7 +11,7 @@ internal class ByteArrayBitmapSource(
     private val offset: Int,
     private val length: Int
 ) : BitmapSource() {
-    override val densityScalingSupported: Boolean
+    override val manualDensityScalingForRegional: Boolean
         get() = false
 
     override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {

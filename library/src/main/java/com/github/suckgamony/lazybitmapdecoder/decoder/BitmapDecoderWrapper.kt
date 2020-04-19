@@ -20,8 +20,8 @@ internal abstract class BitmapDecoderWrapper(
         return other.scaleBy(scaleWidth, scaleHeight)
     }
 
-    override fun makeParameters(): DecodingParametersBuilder {
-        return other.makeParameters()
+    override fun makeParameters(flags: Int): DecodingParametersBuilder {
+        return other.makeParameters(flags)
     }
 
     override fun decode(parametersBuilder: DecodingParametersBuilder): Bitmap? {

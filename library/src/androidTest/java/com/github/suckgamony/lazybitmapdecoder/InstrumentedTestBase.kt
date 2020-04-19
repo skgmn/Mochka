@@ -49,4 +49,8 @@ open class InstrumentedTestBase {
         }
         return true
     }
+
+    companion object {
+        const val MAX_TOLERENCE = 0x0c
+    }
 }

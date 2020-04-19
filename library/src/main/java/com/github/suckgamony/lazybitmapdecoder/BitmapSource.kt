@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.Rect
 
 abstract class BitmapSource {
-    abstract val densityScalingSupported: Boolean
+    abstract val manualDensityScalingForRegional: Boolean
 
     internal abstract fun decodeBitmap(options: BitmapFactory.Options): Bitmap?
 

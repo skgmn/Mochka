@@ -30,8 +30,8 @@ internal class ScaleByBitmapDecoder(
         }
     }
 
-    override fun makeParameters(): DecodingParametersBuilder {
-        return other.makeParameters().apply {
+    override fun makeParameters(flags: Int): DecodingParametersBuilder {
+        return other.makeParameters(flags).apply {
             scaleX *= scaleWidth
             scaleY *= scaleHeight
         }

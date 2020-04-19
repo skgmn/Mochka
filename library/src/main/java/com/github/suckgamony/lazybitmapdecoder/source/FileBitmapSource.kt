@@ -10,7 +10,7 @@ import java.io.File
 internal class FileBitmapSource(
     private val file: File
 ) : BitmapSource() {
-    override val densityScalingSupported: Boolean
+    override val manualDensityScalingForRegional: Boolean
         get() = false
 
     override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {

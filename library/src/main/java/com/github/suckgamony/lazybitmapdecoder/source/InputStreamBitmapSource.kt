@@ -13,7 +13,7 @@ internal class InputStreamBitmapSource(
 ) : BitmapSource() {
     private val rewindableInputStream = RewindableInputStream(inputStream)
 
-    override val densityScalingSupported: Boolean
+    override val manualDensityScalingForRegional: Boolean
         get() = false
 
     override fun decodeBitmap(options: BitmapFactory.Options): Bitmap? {
