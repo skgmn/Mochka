@@ -21,13 +21,6 @@ import java.io.InputStream
 
 @RunWith(AndroidJUnit4::class)
 class SourceBitmapDecoderTest : InstrumentedTestBase() {
-    private lateinit var appContext: Context
-
-    @Before
-    fun setUp() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
     @Test
     fun decodeResource() {
         val byFactory = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image)

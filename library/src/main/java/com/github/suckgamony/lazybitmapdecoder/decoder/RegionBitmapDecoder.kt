@@ -36,21 +36,19 @@ internal class RegionBitmapDecoder(
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         val newFlags = flags or DecodingParametersBuilder.FLAG_REGIONAL
         return other.makeParameters(newFlags).apply {
-            val scaledRegion = region?.also {
-                it.left += (left / scaleX).roundToInt()
-                it.top += (top / scaleY).roundToInt()
-                it.right = it.left + (width / scaleX).roundToInt()
-                it.bottom = it.top + (height / scaleY).roundToInt()
-            } ?: Rect(
-                (left / scaleX).roundToInt(),
-                (top / scaleY).roundToInt(),
-                (right / scaleX).roundToInt(),
-                (bottom / scaleY).roundToInt()
-            )
+            val left = (region?.left ?: 0) + (left / scaleX).roundToInt()
+            val top = (region?.top ?: 0) + (top / scaleY).roundToInt()
+            val right = left + (width / scaleX).roundToInt()
+            val bottom = top + (height / scaleY).roundToInt()
+
+            val scaledRegion = region ?: Rect().also { region = it }
+            scaledRegion.left = left
+            scaledRegion.top = top
+            scaledRegion.right = right
+            scaledRegion.bottom = bottom
 
             scaleX = width.toFloat() / scaledRegion.width()
             scaleY = height.toFloat() / scaledRegion.height()
-            region = scaledRegion
         }
     }
 }

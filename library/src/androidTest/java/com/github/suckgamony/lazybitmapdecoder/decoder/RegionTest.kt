@@ -22,13 +22,6 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class RegionTest : InstrumentedTestBase() {
-    private lateinit var appContext: Context
-
-    @Before
-    fun setUp() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
     @Test
     fun simple() {
         val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)

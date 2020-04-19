@@ -13,13 +13,6 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ScaleByBitmapDecoderTest : InstrumentedTestBase() {
-    private lateinit var appContext: Context
-
-    @Before
-    fun setUp() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
     @Test
     fun scaleToScaleByScaleTo() {
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)

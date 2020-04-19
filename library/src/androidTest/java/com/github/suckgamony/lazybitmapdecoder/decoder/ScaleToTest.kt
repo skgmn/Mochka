@@ -20,13 +20,6 @@ import java.io.File
 
 @RunWith(AndroidJUnit4::class)
 class ScaleToTest : InstrumentedTestBase() {
-    private lateinit var appContext: Context
-
-    @Before
-    fun setUp() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
     @Test
     fun decodeResource() {
         val optsDecodeBounds = BitmapFactory.Options()

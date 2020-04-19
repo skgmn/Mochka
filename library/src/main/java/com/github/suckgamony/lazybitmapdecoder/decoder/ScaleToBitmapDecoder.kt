@@ -18,8 +18,8 @@ internal class ScaleToBitmapDecoder(
 
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags).apply {
-            scaleX = width.toFloat() / other.width
-            scaleY = height.toFloat() / other.height
+            scaleX *= width.toFloat() / other.width
+            scaleY *= height.toFloat() / other.height
         }
     }
 }

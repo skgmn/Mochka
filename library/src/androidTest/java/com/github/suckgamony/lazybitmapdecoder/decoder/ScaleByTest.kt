@@ -17,13 +17,6 @@ import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class ScaleByTest : InstrumentedTestBase() {
-    private lateinit var appContext: Context
-
-    @Before
-    fun setUp() {
-        appContext = InstrumentationRegistry.getInstrumentation().targetContext
-    }
-
     @Test
     fun scaleBy() {
         val opts = BitmapFactory.Options()
@@ -42,26 +35,5 @@ class ScaleByTest : InstrumentedTestBase() {
 
         val byDecoder = assertNotNull(decoder.decode())
         assertEquals(byDecoder, byFactory)
-    }
-
-    @Test
-    fun scaleToScaleBy() {
-        val opts = BitmapFactory.Options()
-        opts.inSampleSize = 2
-        val decodeResource = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, opts)
-        val byFactory = Bitmap.createScaledBitmap(
-            decodeResource,
-            70, 120, true
-        )
-
-        val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = SourceBitmapDecoder(source)
-            .scaleTo(100, 200)
-            .scaleBy(0.7f, 0.6f)
-        assertEquals(70, byFactory.width)
-        assertEquals(120, byFactory.height)
-
-        val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
     }
 }
