@@ -16,6 +16,10 @@ internal class ScaleByBitmapDecoder(
         (other.height * scaleHeight).roundToInt()
     }
 
+    override fun scaleTo(width: Int, height: Int): BitmapDecoder {
+        return other.scaleTo(width, height)
+    }
+
     override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
         return if (scaleWidth == 1f && scaleHeight == 1f) {
             this
@@ -25,7 +29,7 @@ internal class ScaleByBitmapDecoder(
             if (sx == 1f && sy == 1f) {
                 other
             } else {
-                ScaleByBitmapDecoder(other, sx, sy)
+                other.scaleBy(sx, sy)
             }
         }
     }

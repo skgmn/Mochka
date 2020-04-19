@@ -51,6 +51,6 @@ open class InstrumentedTestBase {
     }
 
     companion object {
-        const val MAX_TOLERENCE = 0x0c
+        const val MAX_TOLERENCE = 0x10
     }
 }

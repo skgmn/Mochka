@@ -16,7 +16,11 @@ abstract class BitmapDecoder {
     }
 
     open fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
-        return ScaleByBitmapDecoder(this, scaleWidth, scaleHeight)
+        return if (scaleWidth == 1f && scaleHeight == 1f) {
+            this
+        } else {
+            ScaleByBitmapDecoder(this, scaleWidth, scaleHeight)
+        }
     }
 
     open fun region(left: Int, top: Int, right: Int, bottom: Int): BitmapDecoder {

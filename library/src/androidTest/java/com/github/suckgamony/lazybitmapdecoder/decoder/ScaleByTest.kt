@@ -62,6 +62,6 @@ class ScaleByTest : InstrumentedTestBase() {
         assertEquals(120, byFactory.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, 0x10)
+        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
     }
 }

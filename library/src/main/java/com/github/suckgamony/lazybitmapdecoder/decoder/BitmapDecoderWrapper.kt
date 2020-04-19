@@ -12,14 +12,6 @@ internal abstract class BitmapDecoderWrapper(
     override val height: Int
         get() = other.height
 
-    override fun scaleTo(width: Int, height: Int): BitmapDecoder {
-        return other.scaleTo(width, height)
-    }
-
-    override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
-        return other.scaleBy(scaleWidth, scaleHeight)
-    }
-
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags)
     }
