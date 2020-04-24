@@ -6,35 +6,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
 import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.test.R
-import org.junit.Assert
 import org.junit.Assert.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
-class MixedOperatorTest : InstrumentedTestBase() {
-    @Test
-    fun scaleToScaleBy() {
-        val opts = BitmapFactory.Options()
-        opts.inSampleSize = 2
-        val decodeResource = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, opts)
-        val byFactory = Bitmap.createScaledBitmap(
-            decodeResource,
-            70, 120, true
-        )
-
-        val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
-        val decoder = SourceBitmapDecoder(source)
-            .scaleTo(100, 200)
-            .scaleBy(0.7f, 0.6f)
-        assertEquals(70, decoder.width)
-        assertEquals(120, decoder.height)
-
-        val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
-    }
-
+class ThreeOpsTest : InstrumentedTestBase() {
     @Test
     fun scaleByRegionScaleTo() {
         val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
