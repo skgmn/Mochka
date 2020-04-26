@@ -1,24 +1,29 @@
 package com.github.suckgamony.lazybitmapdecoder
 
+import android.content.ContentResolver
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.AssetManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
+import android.net.Uri
+import android.text.TextUtils
 import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.decoder.RegionBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleByBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleToBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.SourceBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.source.*
-import com.github.suckgamony.lazybitmapdecoder.source.ByteArrayBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.FileBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.InMemoryBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.InputStreamBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.util.LazyInputStream
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.io.InputStream
+import java.net.MalformedURLException
+import java.net.URL
+
 
 abstract class BitmapDecoder {
     abstract val width: Int
@@ -65,6 +70,8 @@ abstract class BitmapDecoder {
     }
 
     companion object {
+        private const val ASSET_PATH_PREFIX = "/android_asset/"
+
         fun fromAsset(context: Context, path: String): BitmapDecoder {
             return SourceBitmapDecoder(AssetBitmapSource(context.assets, path))
         }
@@ -106,6 +113,66 @@ abstract class BitmapDecoder {
         @JvmStatic
         fun fromStream(stream: InputStream): BitmapDecoder {
             return SourceBitmapDecoder(InputStreamBitmapSource(stream))
+        }
+
+        @JvmStatic
+        fun fromUri(context: Context, uri: Uri): BitmapDecoder {
+            return when (val scheme = requireNotNull(uri.scheme)) {
+                ContentResolver.SCHEME_ANDROID_RESOURCE -> {
+                    val packageName: String = requireNotNull(uri.authority)
+                    val res: Resources = if (context.packageName == packageName) {
+                        context.resources
+                    } else {
+                        val pm = context.packageManager
+                        try {
+                            pm.getResourcesForApplication(packageName)
+                        } catch (e: PackageManager.NameNotFoundException) {
+                            throw IllegalArgumentException()
+                        }
+                    }
+                    var id = 0
+                    val segments: List<String> = requireNotNull(uri.pathSegments)
+                    val size = segments.size
+                    if (size == 2 && segments[0] == "drawable") {
+                        val resName = segments[1]
+                        id = res.getIdentifier(resName, "drawable", packageName)
+                    } else if (size == 1 && TextUtils.isDigitsOnly(segments[0])) {
+                        try {
+                            id = segments[0].toInt()
+                        } catch (ignored: NumberFormatException) {
+                        }
+                    }
+                    if (id == 0) {
+                        throw IllegalArgumentException()
+                    } else {
+                        fromResource(res, id)
+                    }
+                }
+                ContentResolver.SCHEME_FILE -> {
+                    val path = requireNotNull(uri.path)
+                    if (path.startsWith(ASSET_PATH_PREFIX)) {
+                        fromAsset(context.assets, path.substring(ASSET_PATH_PREFIX.length))
+                    } else {
+                        fromFile(File(path))
+                    }
+                }
+                "http", "https", "ftp" -> {
+                    fromStream(LazyInputStream {
+                        try {
+                            URL(uri.toString()).openStream()
+                        } catch (e: MalformedURLException) {
+                            throw IllegalArgumentException(e)
+                        }
+                    })
+                }
+                ContentResolver.SCHEME_CONTENT -> {
+                    val cr = context.contentResolver
+                    fromStream(LazyInputStream {
+                        cr.openInputStream(uri) ?: throw FileNotFoundException()
+                    })
+                }
+                else -> throw IllegalArgumentException("Unsupported scheme: $scheme")
+            }
         }
     }
 }
