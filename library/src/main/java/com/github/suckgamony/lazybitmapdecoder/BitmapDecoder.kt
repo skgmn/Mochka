@@ -8,8 +8,10 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.text.TextUtils
+import android.widget.ImageView
 import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.decoder.*
 import com.github.suckgamony.lazybitmapdecoder.decoder.RegionBitmapDecoder
@@ -17,6 +19,7 @@ import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleByBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleToBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleWidthBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.SourceBitmapDecoder
+import com.github.suckgamony.lazybitmapdecoder.frame.FrameBuilder
 import com.github.suckgamony.lazybitmapdecoder.source.*
 import com.github.suckgamony.lazybitmapdecoder.util.LazyInputStream
 import java.io.File
@@ -57,6 +60,16 @@ abstract class BitmapDecoder {
 
     fun region(bounds: Rect): BitmapDecoder {
         return region(bounds.left, bounds.top, bounds.right, bounds.bottom)
+    }
+
+    @JvmOverloads
+    fun frame(
+        scaleType: ImageView.ScaleType,
+        width: Int,
+        height: Int,
+        background: Drawable? = null
+    ): Bitmap? {
+        return FrameBuilder.newInstance(this, scaleType, width, height, background).decode()
     }
 
     fun decode(): Bitmap? {
