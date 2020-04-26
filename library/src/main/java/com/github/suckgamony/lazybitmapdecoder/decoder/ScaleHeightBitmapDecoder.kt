@@ -3,33 +3,32 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 import com.github.suckgamony.lazybitmapdecoder.BitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.DecodingParametersBuilder
 import com.github.suckgamony.lazybitmapdecoder.util.AspectRatioCalculator
-import kotlin.math.roundToInt
 
-internal class ScaleToBitmapDecoder(
+internal class ScaleHeightBitmapDecoder(
     other: BitmapDecoder,
-    override val width: Int,
     override val height: Int
 ) : BitmapDecoderWrapper(other) {
-    override fun scaleTo(width: Int, height: Int): BitmapDecoder {
-        return if (this.width == width && this.height == height) {
-            this
-        } else {
-            other.scaleTo(width, height)
-        }
+    override val width: Int by lazy {
+        AspectRatioCalculator.getWidth(other.width, other.height, height)
     }
 
-    override fun scaleWidth(width: Int): BitmapDecoder {
-        return if (this.width == width) {
+    override fun scaleTo(width: Int, height: Int): BitmapDecoder {
+        return other.scaleTo(width, height)
+    }
+
+    override fun scaleHeight(height: Int): BitmapDecoder {
+        return if (this.height == height) {
             this
         } else {
-            other.scaleTo(width, AspectRatioCalculator.getHeight(this.width, this.height, width))
+            other.scaleHeight(height)
         }
     }
 
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
+        val scale = height.toFloat() / other.height
         return other.makeParameters(flags).apply {
-            scaleX *= width.toFloat() / other.width
-            scaleY *= height.toFloat() / other.height
+            scaleX *= scale
+            scaleY *= scale
         }
     }
 }

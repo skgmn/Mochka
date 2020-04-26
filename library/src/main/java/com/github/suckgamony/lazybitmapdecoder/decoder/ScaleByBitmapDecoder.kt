@@ -6,14 +6,14 @@ import kotlin.math.roundToInt
 
 internal class ScaleByBitmapDecoder(
     other: BitmapDecoder,
-    internal val scaleWidth: Float,
-    internal val scaleHeight: Float
+    private val scaleX: Float,
+    private val scaleY: Float
 ) : BitmapDecoderWrapper(other) {
     override val width: Int by lazy {
-        (other.width * scaleWidth).roundToInt()
+        (other.width * scaleX).roundToInt()
     }
     override val height: Int by lazy {
-        (other.height * scaleHeight).roundToInt()
+        (other.height * scaleY).roundToInt()
     }
 
     override fun scaleTo(width: Int, height: Int): BitmapDecoder {
@@ -24,8 +24,8 @@ internal class ScaleByBitmapDecoder(
         return if (scaleWidth == 1f && scaleHeight == 1f) {
             this
         } else {
-            val sx = this.scaleWidth * scaleWidth
-            val sy = this.scaleHeight * scaleHeight
+            val sx = this.scaleX * scaleWidth
+            val sy = this.scaleY * scaleHeight
             if (sx == 1f && sy == 1f) {
                 other
             } else {
@@ -36,8 +36,8 @@ internal class ScaleByBitmapDecoder(
 
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags).apply {
-            scaleX *= scaleWidth
-            scaleY *= scaleHeight
+            scaleX *= this@ScaleByBitmapDecoder.scaleX
+            scaleY *= this@ScaleByBitmapDecoder.scaleY
         }
     }
 }

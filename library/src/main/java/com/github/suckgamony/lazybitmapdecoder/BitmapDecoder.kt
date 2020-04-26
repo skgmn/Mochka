@@ -11,9 +11,11 @@ import android.graphics.Rect
 import android.net.Uri
 import android.text.TextUtils
 import androidx.annotation.DrawableRes
+import com.github.suckgamony.lazybitmapdecoder.decoder.*
 import com.github.suckgamony.lazybitmapdecoder.decoder.RegionBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleByBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleToBitmapDecoder
+import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleWidthBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.SourceBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.source.*
 import com.github.suckgamony.lazybitmapdecoder.util.LazyInputStream
@@ -31,6 +33,14 @@ abstract class BitmapDecoder {
 
     open fun scaleTo(width: Int, height: Int): BitmapDecoder {
         return ScaleToBitmapDecoder(this, width, height)
+    }
+
+    open fun scaleWidth(width: Int): BitmapDecoder {
+        return ScaleWidthBitmapDecoder(this, width)
+    }
+
+    open fun scaleHeight(height: Int): BitmapDecoder {
+        return ScaleHeightBitmapDecoder(this, height)
     }
 
     open fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
