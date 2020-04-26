@@ -1,5 +1,7 @@
 package com.github.suckgamony.lazybitmapdecoder
 
+import android.content.Context
+import android.content.res.AssetManager
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Matrix
@@ -63,6 +65,14 @@ abstract class BitmapDecoder {
     }
 
     companion object {
+        fun fromAsset(context: Context, path: String): BitmapDecoder {
+            return SourceBitmapDecoder(AssetBitmapSource(context.assets, path))
+        }
+
+        fun fromAsset(assetManager: AssetManager, path: String): BitmapDecoder {
+            return SourceBitmapDecoder(AssetBitmapSource(assetManager, path))
+        }
+
         @JvmStatic
         fun fromBitmap(bitmap: Bitmap): BitmapDecoder {
             return SourceBitmapDecoder(InMemoryBitmapSource(bitmap))
@@ -81,6 +91,11 @@ abstract class BitmapDecoder {
         @JvmStatic
         fun fromFile(file: File): BitmapDecoder {
             return SourceBitmapDecoder(FileBitmapSource(file))
+        }
+
+        @JvmStatic
+        fun fromResource(context: Context, @DrawableRes id: Int): BitmapDecoder {
+            return SourceBitmapDecoder(ResourceBitmapSource(context.resources, id))
         }
 
         @JvmStatic

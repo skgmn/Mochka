@@ -6,11 +6,8 @@ import android.graphics.BitmapFactory
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
-import com.github.suckgamony.lazybitmapdecoder.source.ByteArrayBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.FileBitmapSource
-import com.github.suckgamony.lazybitmapdecoder.source.InputStreamBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.*
 import com.github.suckgamony.lazybitmapdecoder.test.R
-import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -155,6 +152,21 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
         val byFactory = BitmapFactory.decodeStream(appContext.resources.openRawResource(R.drawable.nodpi_image))
 
         val source = InputStreamBitmapSource(appContext.resources.openRawResource(R.drawable.nodpi_image))
+        val decoder = SourceBitmapDecoder(source)
+
+        assertEquals(decoder.width, byFactory.width)
+        assertEquals(decoder.height, byFactory.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertEquals(byDecoder, byFactory)
+    }
+
+    @Test
+    fun decodeAssetWithMetadata() {
+        val stream = appContext.assets.open("nodpi_image.jpg")
+        val byFactory = BitmapFactory.decodeStream(stream)
+
+        val source = AssetBitmapSource(appContext.assets, "nodpi_image.jpg")
         val decoder = SourceBitmapDecoder(source)
 
         assertEquals(decoder.width, byFactory.width)
