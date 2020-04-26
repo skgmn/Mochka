@@ -2,22 +2,21 @@ package com.github.suckgamony.lazybitmapdecoder.decoder
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Matrix
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.suckgamony.lazybitmapdecoder.InstrumentedTestBase
 import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
 import com.github.suckgamony.lazybitmapdecoder.test.R
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)
 class TwoOpsTest : InstrumentedTestBase() {
     @Test
     fun scaleToScaleTo() {
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
-        val scaledTo = Bitmap.createScaledBitmap(bitmap, 100, 200, true)
+        val scaledTo = decodeBitmapScaleTo(100, 200) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
         val byFactory = scaledTo
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
@@ -33,8 +32,9 @@ class TwoOpsTest : InstrumentedTestBase() {
 
     @Test
     fun scaleToScaleBy() {
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
-        val scaledTo = Bitmap.createScaledBitmap(bitmap, 110, 240, true)
+        val scaledTo = decodeBitmapScaleTo(110, 240) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
         val byFactory = scaledTo
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
@@ -50,8 +50,9 @@ class TwoOpsTest : InstrumentedTestBase() {
 
     @Test
     fun scaleToRegion() {
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
-        val scaledTo = Bitmap.createScaledBitmap(bitmap, 300, 400, true)
+        val scaledTo = decodeBitmapScaleTo(300, 400) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
         val regioned = Bitmap.createBitmap(scaledTo, 100, 110, 120, 130)
         val byFactory = regioned
 
@@ -68,8 +69,9 @@ class TwoOpsTest : InstrumentedTestBase() {
 
     @Test
     fun scaleByScaleTo() {
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
-        val scaledTo = Bitmap.createScaledBitmap(bitmap, 200, 210, true)
+        val scaledTo = decodeBitmapScaleTo(200, 210) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
         val byFactory = scaledTo
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
@@ -85,14 +87,10 @@ class TwoOpsTest : InstrumentedTestBase() {
 
     @Test
     fun scaleByScaleBy() {
-        val m = Matrix()
-        val opts = BitmapFactory.Options()
-        opts.inSampleSize = 2
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, opts)
-        m.setScale(0.35f * opts.inSampleSize, 0.48f * opts.inSampleSize)
-        val byFactory = Bitmap.createBitmap(
-            bitmap, 0, 0, bitmap.width, bitmap.height, m, true
-        )
+        val scaledBy = decodeBitmapScaleBy(0.35f, 0.48f) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledBy
 
         val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
         val decoder = SourceBitmapDecoder(source)
@@ -107,10 +105,8 @@ class TwoOpsTest : InstrumentedTestBase() {
 
     @Test
     fun scaleByRegion() {
-        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
-        val scaledBy = Matrix().let { m ->
-            m.setScale(0.7f, 0.8f)
-            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        val scaledBy = decodeBitmapScaleBy(0.7f, 0.8f) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
         }
         val regioned = Bitmap.createBitmap(scaledBy, 100, 110, 120, 130)
         val byFactory = regioned
@@ -139,6 +135,42 @@ class TwoOpsTest : InstrumentedTestBase() {
             .scaleTo(140, 150)
         assertEquals(140, decoder.width)
         assertEquals(150, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertEquals(byDecoder, byFactory)
+    }
+
+    @Test
+    fun regionScaleBy() {
+        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
+        val regioned = Bitmap.createBitmap(bitmap, 100, 110, 120, 130)
+        val scaledBy = scaleBy(regioned, 0.9f, 0.8f)
+        val byFactory = scaledBy
+
+        val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
+        val decoder = SourceBitmapDecoder(source)
+            .region(100, 110, 100 + 120, 110 + 130)
+            .scaleBy(0.9f, 0.8f)
+        assertEquals(byFactory.width, decoder.width)
+        assertEquals(byFactory.height, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertEquals(byDecoder, byFactory)
+    }
+
+    @Test
+    fun regionRegion() {
+        val bitmap = BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, null)
+        val regioned = Bitmap.createBitmap(bitmap, 100, 110, 120, 130)
+        val regioned2 = Bitmap.createBitmap(regioned, 10, 20, 30, 40)
+        val byFactory = regioned2
+
+        val source = ResourceBitmapSource(appContext.resources, R.drawable.nodpi_image)
+        val decoder = SourceBitmapDecoder(source)
+            .region(100, 110, 100 + 120, 110 + 130)
+            .region(10, 20, 10 + 30, 20 + 40)
+        assertEquals(30, decoder.width)
+        assertEquals(40, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
         assertEquals(byDecoder, byFactory)

@@ -2,13 +2,13 @@ package com.github.suckgamony.lazybitmapdecoder
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.graphics.Matrix
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.Assert
-import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import java.util.*
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
 
@@ -27,6 +27,45 @@ open class InstrumentedTestBase {
 
     fun assertEquals(bitmap1: Bitmap, bitmap2: Bitmap, tolerance: Int = 0, percentage: Float = 1f) {
         assertTrue(equals(bitmap1, bitmap2, tolerance, percentage))
+    }
+
+    fun decodeBitmapScaleTo(width: Int, height: Int, decoder: (BitmapFactory.Options?) -> Bitmap?): Bitmap {
+        val opts = BitmapFactory.Options()
+        opts.inJustDecodeBounds = true
+        decoder(opts)
+
+        return decodeBitmapScaleBy(
+            width.toFloat() / opts.outWidth,
+            height.toFloat() / opts.outHeight,
+            decoder
+        )
+    }
+
+    fun decodeBitmapScaleBy(scaleX: Float, scaleY: Float, decoder: (BitmapFactory.Options?) -> Bitmap?): Bitmap {
+        var sx = scaleX
+        var sy = scaleY
+        var sampleSize = 1
+        while (sx <= 0.5f && sy <= 0.5f) {
+            sx *= 2f
+            sy *= 2f
+            sampleSize *= 2
+        }
+
+        val opts = BitmapFactory.Options()
+        opts.inSampleSize = sampleSize
+        val bitmap = checkNotNull(decoder(opts))
+
+        return Matrix().let { m ->
+            m.setScale(sx, sy)
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        }
+    }
+
+    fun scaleBy(bitmap: Bitmap, scaleX: Float, scaleY: Float): Bitmap {
+        return Matrix().let { m ->
+            m.setScale(scaleX, scaleY)
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        }
     }
 
     private fun equals(bitmap1: Bitmap, bitmap2: Bitmap, tolerance: Int, percentage: Float): Boolean {
