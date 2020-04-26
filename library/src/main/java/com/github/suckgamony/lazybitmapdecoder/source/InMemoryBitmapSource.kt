@@ -3,7 +3,7 @@ package com.github.suckgamony.lazybitmapdecoder.source
 import android.graphics.*
 import com.github.suckgamony.lazybitmapdecoder.BitmapSource
 
-class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
+internal class InMemoryBitmapSource(private val bitmap: Bitmap) : BitmapSource() {
     override val manualDensityScalingForRegional: Boolean
         get() = false
 

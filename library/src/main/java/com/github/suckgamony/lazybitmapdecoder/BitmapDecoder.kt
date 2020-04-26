@@ -1,11 +1,22 @@
 package com.github.suckgamony.lazybitmapdecoder
 
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.graphics.Rect
+import androidx.annotation.DrawableRes
 import com.github.suckgamony.lazybitmapdecoder.decoder.RegionBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleByBitmapDecoder
 import com.github.suckgamony.lazybitmapdecoder.decoder.ScaleToBitmapDecoder
+import com.github.suckgamony.lazybitmapdecoder.decoder.SourceBitmapDecoder
+import com.github.suckgamony.lazybitmapdecoder.source.*
+import com.github.suckgamony.lazybitmapdecoder.source.ByteArrayBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.FileBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.InMemoryBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.InputStreamBitmapSource
+import com.github.suckgamony.lazybitmapdecoder.source.ResourceBitmapSource
+import java.io.File
+import java.io.InputStream
 
 abstract class BitmapDecoder {
     abstract val width: Int
@@ -48,6 +59,38 @@ abstract class BitmapDecoder {
             val m = Matrix()
             m.setScale(params.postScaleX, params.postScaleY)
             Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, m, true)
+        }
+    }
+
+    companion object {
+        @JvmStatic
+        fun fromBitmap(bitmap: Bitmap): BitmapDecoder {
+            return SourceBitmapDecoder(InMemoryBitmapSource(bitmap))
+        }
+
+        @JvmStatic
+        fun fromByteArray(array: ByteArray): BitmapDecoder {
+            return fromByteArray(array, 0, array.size)
+        }
+
+        @JvmStatic
+        fun fromByteArray(array: ByteArray, offset: Int, length: Int): BitmapDecoder {
+            return SourceBitmapDecoder(ByteArrayBitmapSource(array, offset, length))
+        }
+
+        @JvmStatic
+        fun fromFile(file: File): BitmapDecoder {
+            return SourceBitmapDecoder(FileBitmapSource(file))
+        }
+
+        @JvmStatic
+        fun fromResource(res: Resources, @DrawableRes id: Int): BitmapDecoder {
+            return SourceBitmapDecoder(ResourceBitmapSource(res, id))
+        }
+
+        @JvmStatic
+        fun fromStream(stream: InputStream): BitmapDecoder {
+            return SourceBitmapDecoder(InputStreamBitmapSource(stream))
         }
     }
 }
