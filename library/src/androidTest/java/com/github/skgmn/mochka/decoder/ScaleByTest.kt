@@ -34,6 +34,6 @@ class ScaleByTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactory.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 }

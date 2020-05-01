@@ -25,6 +25,10 @@ open class InstrumentedTestBase {
         return obj!!
     }
 
+    fun assertSimilar(bitmap1: Bitmap, bitmap2: Bitmap) {
+        return assertEquals(bitmap1, bitmap2, MAX_TOLERENCE, 0.9f)
+    }
+
     fun assertEquals(bitmap1: Bitmap, bitmap2: Bitmap, tolerance: Int = 0, percentage: Float = 1f) {
         assertTrue(equals(bitmap1, bitmap2, tolerance, percentage))
     }

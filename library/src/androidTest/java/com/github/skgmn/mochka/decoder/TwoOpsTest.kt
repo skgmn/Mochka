@@ -30,7 +30,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(200, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -51,7 +51,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(240, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -73,7 +73,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(130, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -94,7 +94,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(210, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -115,7 +115,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -137,7 +137,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(130, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -158,7 +158,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(150, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -179,7 +179,7 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -200,6 +200,6 @@ class TwoOpsTest : InstrumentedTestBase() {
         assertEquals(40, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 }

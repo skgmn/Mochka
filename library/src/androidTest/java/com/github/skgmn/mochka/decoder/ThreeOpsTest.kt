@@ -31,7 +31,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(600, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -54,7 +54,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -77,7 +77,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -99,7 +99,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -121,7 +121,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -144,7 +144,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -168,7 +168,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -192,7 +192,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -216,7 +216,7 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(byFactory.height, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -240,6 +240,6 @@ class ThreeOpsTest : InstrumentedTestBase() {
         assertEquals(150, decoder.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE, 0.9f)
+        assertSimilar(byDecoder, byFactory)
     }
 }

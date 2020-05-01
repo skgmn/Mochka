@@ -35,7 +35,7 @@ class RegionTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactory.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -63,7 +63,7 @@ class RegionTest : InstrumentedTestBase() {
             ).region(12, 34, 12 + 56, 34 + 78)
             val byDecoder = assertNotNull(decoder.decode())
 
-            assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+            assertSimilar(byDecoder, byFactory)
         }
     }
 
@@ -91,7 +91,7 @@ class RegionTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactoryFromByteArray.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactoryFromByteArray, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactoryFromByteArray)
     }
 
     @Test
@@ -114,7 +114,7 @@ class RegionTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactoryFromFile.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactoryFromFile, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactoryFromFile)
     }
 
     @Test
@@ -134,7 +134,7 @@ class RegionTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactory.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory)
+        assertSimilar(byDecoder, byFactory)
     }
 
     @Test
@@ -158,6 +158,6 @@ class RegionTest : InstrumentedTestBase() {
         assertEquals(decoder.height, byFactory.height)
 
         val byDecoder = assertNotNull(decoder.decode())
-        assertEquals(byDecoder, byFactory, MAX_TOLERENCE)
+        assertSimilar(byDecoder, byFactory)
     }
 }
