@@ -40,6 +40,10 @@ abstract class BitmapDecoder {
         return region(bounds.left, bounds.top, bounds.right, bounds.bottom)
     }
 
+    open fun mutable(mutable: Boolean): BitmapDecoder {
+        return MutableBitmapDecoder(this, mutable)
+    }
+
     @JvmOverloads
     fun frame(
         scaleType: ImageView.ScaleType,

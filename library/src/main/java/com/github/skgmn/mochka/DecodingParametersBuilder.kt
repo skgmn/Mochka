@@ -7,7 +7,8 @@ import com.github.skgmn.mochka.DecodingParameters
 internal class DecodingParametersBuilder(
     var scaleX: Float = 1f,
     var scaleY: Float = 1f,
-    var region: Rect? = null
+    var region: Rect? = null,
+    var mutable: Boolean = false
 ) {
     fun buildParameters(): DecodingParameters {
         val options = BitmapFactory.Options()
@@ -21,6 +22,8 @@ internal class DecodingParametersBuilder(
             sy *= 2f
         }
         options.inSampleSize = sampleSize
+
+        options.inMutable = mutable
 
         return DecodingParameters(
             options = options,

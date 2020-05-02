@@ -25,6 +25,14 @@ internal class ScaleToBitmapDecoder(
         }
     }
 
+    override fun scaleHeight(height: Int): BitmapDecoder {
+        return if (this.height == height) {
+            this
+        } else {
+            other.scaleTo(AspectRatioCalculator.getWidth(this.width, this.height, height), height)
+        }
+    }
+
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags).apply {
             scaleX *= width.toFloat() / other.width
