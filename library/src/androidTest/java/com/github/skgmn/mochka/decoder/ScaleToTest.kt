@@ -13,7 +13,7 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ScaleToTest : InstrumentedTestBase() {
     @Test
-    fun decodeResource() {
+    fun simple() {
         val optsDecodeBounds = BitmapFactory.Options()
         optsDecodeBounds.inJustDecodeBounds = true
         BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, optsDecodeBounds)
