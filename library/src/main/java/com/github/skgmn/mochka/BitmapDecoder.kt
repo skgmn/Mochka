@@ -11,6 +11,7 @@ import com.github.skgmn.mochka.frame.FrameBuilder
 abstract class BitmapDecoder {
     abstract val width: Int
     abstract val height: Int
+    abstract val mimeType: String
 
     open fun scaleTo(width: Int, height: Int): BitmapDecoder {
         return ScaleToBitmapDecoder(this, width, height)

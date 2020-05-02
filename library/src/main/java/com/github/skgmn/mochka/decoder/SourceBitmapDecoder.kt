@@ -17,6 +17,8 @@ internal class SourceBitmapDecoder(
     @GuardedBy("boundsDecodeLock")
     private var heightDecoded = -1
     @GuardedBy("boundsDecodeLock")
+    private var mimeTypeDecoded = ""
+    @GuardedBy("boundsDecodeLock")
     private var densityScale = 1f
 
     private val boundsDecoded
@@ -37,6 +39,13 @@ internal class SourceBitmapDecoder(
                 return heightDecoded
             }
         }
+    override val mimeType: String
+        get() {
+            synchronized(boundsDecodeLock) {
+                decodeBounds()
+                return mimeTypeDecoded
+            }
+        }
 
     @GuardedBy("boundsDecodeLock")
     private fun decodeBounds() {
@@ -55,6 +64,7 @@ internal class SourceBitmapDecoder(
     private fun copyMetadata(options: BitmapFactory.Options) {
         widthDecoded = options.outWidth
         heightDecoded = options.outHeight
+        mimeTypeDecoded = options.outMimeType
         if (options.inScaled && options.inDensity != 0 && options.inTargetDensity != 0) {
             densityScale = options.inTargetDensity.toFloat() / options.inDensity
         }

@@ -11,6 +11,8 @@ internal abstract class BitmapDecoderWrapper(
         get() = other.width
     override val height: Int
         get() = other.height
+    override val mimeType: String
+        get() = other.mimeType
 
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags)
