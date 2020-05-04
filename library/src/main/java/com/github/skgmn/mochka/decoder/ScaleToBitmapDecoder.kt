@@ -34,13 +34,6 @@ internal class ScaleToBitmapDecoder(
         }
     }
 
-    override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
-        return other.scaleTo(
-            (width * scaleWidth).roundToInt(),
-            (height * scaleHeight).roundToInt()
-        )
-    }
-
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         return other.makeParameters(flags).apply {
             scaleX *= width.toFloat() / other.width
