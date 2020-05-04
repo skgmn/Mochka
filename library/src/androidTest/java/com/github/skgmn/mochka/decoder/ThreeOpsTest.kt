@@ -81,6 +81,28 @@ class ThreeOpsTest : InstrumentedTestBase() {
     }
 
     @Test
+    fun scaleToScaleWidthScaleBy() {
+        val scaledTo = decodeBitmapScaleTo(67, 133) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledTo
+
+        val source = ResourceBitmapSource(
+            appContext.resources,
+            R.drawable.nodpi_image
+        )
+        val decoder = SourceBitmapDecoder(source)
+            .scaleTo(100, 199)
+            .scaleWidth(133)
+            .scaleBy(0.5f, 0.5f)
+        assertEquals(67, decoder.width)
+        assertEquals(133, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertSimilar(byDecoder, byFactory)
+    }
+
+    @Test
     fun scaleToScaleByScaleTo() {
         val scaledTo = decodeBitmapScaleTo(300, 400) {
             BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)

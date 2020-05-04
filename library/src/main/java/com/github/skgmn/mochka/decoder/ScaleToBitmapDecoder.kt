@@ -3,6 +3,7 @@ package com.github.skgmn.mochka.decoder
 import com.github.skgmn.mochka.BitmapDecoder
 import com.github.skgmn.mochka.DecodingParametersBuilder
 import com.github.skgmn.mochka.util.AspectRatioCalculator
+import kotlin.math.roundToInt
 
 internal class ScaleToBitmapDecoder(
     other: BitmapDecoder,
@@ -31,6 +32,13 @@ internal class ScaleToBitmapDecoder(
         } else {
             other.scaleTo(AspectRatioCalculator.getWidth(this.width, this.height, height), height)
         }
+    }
+
+    override fun scaleBy(scaleWidth: Float, scaleHeight: Float): BitmapDecoder {
+        return other.scaleTo(
+            (width * scaleWidth).roundToInt(),
+            (height * scaleHeight).roundToInt()
+        )
     }
 
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
