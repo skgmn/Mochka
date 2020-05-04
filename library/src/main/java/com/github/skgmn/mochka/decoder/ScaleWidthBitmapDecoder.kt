@@ -24,6 +24,10 @@ internal class ScaleWidthBitmapDecoder(
         }
     }
 
+    override fun scaleHeight(height: Int): BitmapDecoder {
+        return other.scaleHeight(height)
+    }
+
     override fun makeParameters(flags: Int): DecodingParametersBuilder {
         val scale = width.toFloat() / other.width
         return other.makeParameters(flags).apply {

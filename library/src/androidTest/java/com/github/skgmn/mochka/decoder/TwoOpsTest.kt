@@ -77,6 +77,90 @@ class TwoOpsTest : InstrumentedTestBase() {
     }
 
     @Test
+    fun scaleWidthScaleWidth() {
+        val scaledTo = decodeBitmapScaleTo(200, 120) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledTo
+
+        val source = ResourceBitmapSource(
+            appContext.resources,
+            R.drawable.nodpi_image
+        )
+        val decoder = SourceBitmapDecoder(source)
+            .scaleWidth(100)
+            .scaleWidth(200)
+        assertEquals(byFactory.width, decoder.width)
+        assertEquals(byFactory.height, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertSimilar(byDecoder, byFactory)
+    }
+
+    @Test
+    fun scaleWidthScaleHeight() {
+        val scaledTo = decodeBitmapScaleTo(333, 200) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledTo
+
+        val source = ResourceBitmapSource(
+            appContext.resources,
+            R.drawable.nodpi_image
+        )
+        val decoder = SourceBitmapDecoder(source)
+            .scaleWidth(100)
+            .scaleHeight(200)
+        assertEquals(byFactory.width, decoder.width)
+        assertEquals(byFactory.height, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertSimilar(byDecoder, byFactory)
+    }
+
+    @Test
+    fun scaleHeightScaleWidth() {
+        val scaledTo = decodeBitmapScaleTo(200, 120) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledTo
+
+        val source = ResourceBitmapSource(
+            appContext.resources,
+            R.drawable.nodpi_image
+        )
+        val decoder = SourceBitmapDecoder(source)
+            .scaleHeight(100)
+            .scaleWidth(200)
+        assertEquals(byFactory.width, decoder.width)
+        assertEquals(byFactory.height, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertSimilar(byDecoder, byFactory)
+    }
+
+    @Test
+    fun scaleHeightScaleHeight() {
+        val scaledTo = decodeBitmapScaleTo(333, 200) {
+            BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)
+        }
+        val byFactory = scaledTo
+
+        val source = ResourceBitmapSource(
+            appContext.resources,
+            R.drawable.nodpi_image
+        )
+        val decoder = SourceBitmapDecoder(source)
+            .scaleHeight(100)
+            .scaleHeight(200)
+        assertEquals(byFactory.width, decoder.width)
+        assertEquals(byFactory.height, decoder.height)
+
+        val byDecoder = assertNotNull(decoder.decode())
+        assertSimilar(byDecoder, byFactory)
+    }
+
+    @Test
     fun scaleByScaleTo() {
         val scaledTo = decodeBitmapScaleTo(200, 210) {
             BitmapFactory.decodeResource(appContext.resources, R.drawable.nodpi_image, it)

@@ -16,6 +16,10 @@ internal class ScaleHeightBitmapDecoder(
         return other.scaleTo(width, height)
     }
 
+    override fun scaleWidth(width: Int): BitmapDecoder {
+        return other.scaleWidth(width)
+    }
+
     override fun scaleHeight(height: Int): BitmapDecoder {
         return if (this.height == height) {
             this
