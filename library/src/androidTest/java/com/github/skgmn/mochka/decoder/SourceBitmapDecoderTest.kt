@@ -41,6 +41,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
 
         assertEquals(decoder.width, byFactory.width)
         assertEquals(decoder.height, byFactory.height)
+        assertEquals(decoder.mimeType, "image/jpeg")
 
         val byDecoder = assertNotNull(decoder.decode())
         assertSimilar(byDecoder, byFactory)
@@ -110,6 +111,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
         val decoder = SourceBitmapDecoder(source)
         assertEquals(decoder.width, byFactoryFromByteArray.width)
         assertEquals(decoder.height, byFactoryFromByteArray.height)
+        assertEquals(decoder.mimeType, "image/png")
 
         val byDecoder = assertNotNull(decoder.decode())
         assertSimilar(byDecoder, byFactoryFromByteArray)
@@ -146,6 +148,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
         val decoder = SourceBitmapDecoder(source)
         assertEquals(decoder.width, byFactoryFromFile.width)
         assertEquals(decoder.height, byFactoryFromFile.height)
+        assertEquals(decoder.mimeType, "image/png")
 
         val byDecoder = assertNotNull(decoder.decode())
         assertSimilar(byDecoder, byFactoryFromFile)
@@ -175,6 +178,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
 
         assertEquals(decoder.width, byFactory.width)
         assertEquals(decoder.height, byFactory.height)
+        assertEquals(decoder.mimeType, "image/jpeg")
 
         val byDecoder = assertNotNull(decoder.decode())
         assertSimilar(byDecoder, byFactory)
@@ -193,6 +197,7 @@ class SourceBitmapDecoderTest : InstrumentedTestBase() {
 
         assertEquals(decoder.width, byFactory.width)
         assertEquals(decoder.height, byFactory.height)
+        assertEquals(decoder.mimeType, "image/jpeg")
 
         val byDecoder = assertNotNull(decoder.decode())
         assertSimilar(byDecoder, byFactory)
