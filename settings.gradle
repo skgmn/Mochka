@@ -1,2 +1,2 @@
-include ':library'
+include ':library', ':sampleapp'
 rootProject.name='Mochka'
