@@ -36,7 +36,7 @@ class LargeImageFragment : Fragment() {
 
         val res = resources
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            val width = getWidth(imageView)
+            val width = imageView.getLayoutWidth()
             val decodeResult = withContext(Dispatchers.IO) {
                 val decoder = Mochka.decodeResource(res, R.drawable.very_large_image)
                 BitmapDecodeResult(
@@ -47,27 +47,6 @@ class LargeImageFragment : Fragment() {
             }
             imageDescView.text = "Loaded ${decodeResult.width}x${decodeResult.height} bitmap"
             imageView.setImageBitmap(decodeResult.bitmap)
-        }
-    }
-
-    private suspend fun getWidth(view: View): Int {
-        return suspendCoroutine { cont ->
-            view.addOnLayoutChangeListener(object : View.OnLayoutChangeListener {
-                override fun onLayoutChange(
-                    v: View?,
-                    left: Int,
-                    top: Int,
-                    right: Int,
-                    bottom: Int,
-                    oldLeft: Int,
-                    oldTop: Int,
-                    oldRight: Int,
-                    oldBottom: Int
-                ) {
-                    view.removeOnLayoutChangeListener(this)
-                    cont.resume(right - left)
-                }
-            })
         }
     }
 

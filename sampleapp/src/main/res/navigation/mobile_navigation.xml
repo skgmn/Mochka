@@ -12,10 +12,10 @@
         tools:layout="@layout/fragment_large_image" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.github.skgmn.mochka.sampleapp.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_scale_type"
+        android:name="com.github.skgmn.mochka.sampleapp.ScaleTypeFragment"
+        android:label="@string/menu_scale_type"
+        tools:layout="@layout/fragment_scale_type" />
 
     <fragment
         android:id="@+id/nav_slideshow"
