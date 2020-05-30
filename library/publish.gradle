@@ -1,0 +1,35 @@
+apply plugin: 'maven-publish'
+
+def getRepositoryUsername() {
+    return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
+}
+
+def getRepositoryPassword() {
+    return hasProperty('NEXUS_PASSWORD') ? NEXUS_PASSWORD : ""
+}
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                url "https://oss.sonatype.org/service/local/staging/deploy/maven2"
+                credentials {
+                    username getRepositoryUsername()
+                    password getRepositoryPassword()
+                }
+            }
+        }
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                // Applies the component for the release build variant.
+                from components.release
+
+                // You can then customize attributes of the publication as shown below.
+                groupId = 'com.github.skgmn'
+                artifactId = 'mochka'
+                version = '1.0.0'
+            }
+        }
+    }
+}
