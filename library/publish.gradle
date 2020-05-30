@@ -1,4 +1,5 @@
 apply plugin: 'maven-publish'
+apply plugin: 'signing'
 
 def getRepositoryUsername() {
     return hasProperty('NEXUS_USERNAME') ? NEXUS_USERNAME : ""
@@ -29,7 +30,33 @@ afterEvaluate {
                 groupId = 'com.github.skgmn'
                 artifactId = 'mochka'
                 version = '1.0.0'
+
+                pom {
+                    name = 'Mochka'
+                    description = 'Android Bitmap Decoder'
+                    url = 'https://github.com/skgmn/mochka'
+                    licenses {
+                        license {
+                            name = 'MIT License'
+                            url = 'http://opensource.org/licenses/MIT'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'skgmn'
+                            name = 'skgmn'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git@github.com:skgmn/Mochka.git'
+                        developerConnection = 'scm:git@github.com:skgmn/Mochka.git'
+                        url = 'https://github.com/skgmn/Mochka'
+                    }
+                }
             }
         }
+    }
+    signing {
+        sign publishing.publications.release
     }
 }
