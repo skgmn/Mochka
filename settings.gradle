@@ -1,2 +1,2 @@
-include ':library'
-rootProject.name='LazyBitmapDecoder'
+include ':library', ':sampleapp'
+rootProject.name='Mochka'
